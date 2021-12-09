@@ -33,6 +33,8 @@ public class KafkaController {
 	@Autowired
 	Producer producer;
 	
+	public int count=0;
+	
 	@PostMapping(value="/post")
 	public void sendMessage(@RequestParam("value") String value, @RequestParam("tag") String tag) throws IOException, URISyntaxException {
 		
@@ -71,10 +73,11 @@ public class KafkaController {
 	    if (null != entity) {
 	      BufferedReader reader = new BufferedReader(new InputStreamReader((entity.getContent())));
 	      String line = reader.readLine();
-	      while (line != null) {
+	      while (count<20 && line != null) {
 	        //System.out.println(line);
 	    	  producer.publishToTopic(line);
 	    	  line = reader.readLine();
+	    	  count++;
 	      }
 	    }
 
